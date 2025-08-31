@@ -42,7 +42,7 @@ fn main() {
         // If you stored as integer term, you may need external decoding.
         // For quick debugging, check if it's directly an integer:
        
-         println!("Current chain height (decoded): {}", decode_height(&bytes));
+         println!("Current chain height (decoded): {:?}", decode_height(&bytes));
     } else {
         println!("No temporal_height key found, maybe query rooted_tip instead");
     }
