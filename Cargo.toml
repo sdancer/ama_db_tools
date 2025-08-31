@@ -5,8 +5,8 @@ edition = "2024"
 
 [dependencies]
 
-rustler = "0.36.0"
-
 rocksdb = { git = "https://github.com/rust-rocksdb/rust-rocksdb", branch = "master" }
 
 lazy_static = "1.4.0"
+
+eetf = "0.10.0"
