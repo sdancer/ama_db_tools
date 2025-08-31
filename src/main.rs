@@ -1,0 +1,33 @@
+use rocksdb::{DB, Options};
+use std::path::Path;
+
+fn main() {
+    // Path to your fabric DB
+    let db_path = "/path/to/workdir/db/fabric";
+
+    // Open DB with needed column families
+    let cf_names = vec!["default", "entry_by_height|height:entryhash", "sysconf"];
+
+    let opts = Options::default();
+    let db = DB::open_cf_for_read_only(&opts, db_path, &cf_names, false)
+        .expect("Failed to open RocksDB");
+
+    // Get handle for sysconf column family
+    let sysconf_cf = db.cf_handle("sysconf").expect("sysconf CF not found");
+
+    // Try to read "temporal_height"
+    if let Ok(Some(value)) = db.get_cf(&sysconf_cf, "temporal_height") {
+        // Values in sysconf are term-encoded binaries in Elixir.
+        // For simplicity, we just print raw bytes.
+        println!("Raw temporal_height bytes: {:?}", value);
+
+        // If you stored as integer term, you may need external decoding.
+        // For quick debugging, check if it's directly an integer:
+        if value.len() == 8 {
+            let height = i64::from_be_bytes(value.try_into().unwrap());
+            println!("Current chain height (decoded): {}", height);
+        }
+    } else {
+        println!("No temporal_height key found, maybe query rooted_tip instead");
+    }
+}

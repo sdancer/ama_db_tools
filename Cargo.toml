@@ -1,0 +1,12 @@
+[package]
+name = "db_tools"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+rustler = "0.36.0"
+
+rocksdb = { git = "https://github.com/rust-rocksdb/rust-rocksdb", branch = "master" }
+
+lazy_static = "1.4.0"
