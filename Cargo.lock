@@ -148,6 +148,7 @@ version = "0.1.0"
 dependencies = [
  "eetf",
  "lazy_static",
+ "num-bigint",
  "rocksdb",
 ]
 

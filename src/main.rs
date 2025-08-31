@@ -1,14 +1,30 @@
 use rocksdb::{DB, Options};
 use std::path::Path;
 use std::io::Cursor;
-use eetf::{Term, FixInteger, Integer};
+
+use std::io::Cursor;
+use eetf::{Term, FixInteger, Integer, BigInteger};
+use num_bigint::BigInt; // add = "0.4" to Cargo.toml if you want BigInt support
+
+fn decode_height(bytes: &[u8]) -> Option<i64> {
+    let term = Term::decode(Cursor::new(bytes)).ok()?;
+    match term {
+        Term::FixInteger(FixInteger { value }) => Some(value as i64),
+        Term::Integer(Integer { value }) => Some(value as i64),
+        Term::BigInteger(BigInteger { value }) => {
+            // Try to downcast BigInt into i64 safely
+            value.to_i64()
+        }
+        _ => None,
+    }
+}
 
 fn main() {
     // Path to your fabric DB
     let db_path = "/path/to/workdir/db/fabric";
 
     // Open DB with needed column families
-    let cf_names = vec!["default", "entry_by_height|height:entryhash", "sysconf"];
+    let cf_names = vec!["entry_by_height|height:entryhash", "sysconf"];
 
     let opts = Options::default();
     let db = DB::open_cf_for_read_only(&opts, db_path, &cf_names, false)

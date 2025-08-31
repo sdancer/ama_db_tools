@@ -10,3 +10,5 @@ rocksdb = { git = "https://github.com/rust-rocksdb/rust-rocksdb", branch = "mast
 lazy_static = "1.4.0"
 
 eetf = "0.10.0"
+
+num-bigint = "0.4"
