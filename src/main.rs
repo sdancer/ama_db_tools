@@ -5,12 +5,12 @@ use std::io::Cursor;
 use std::io::Cursor;
 use eetf::{Term, FixInteger, Integer, BigInteger};
 use num_bigint::BigInt; // add = "0.4" to Cargo.toml if you want BigInt support
+use num_traits::cast::ToPrimitive;
 
 fn decode_height(bytes: &[u8]) -> Option<i64> {
     let term = Term::decode(Cursor::new(bytes)).ok()?;
     match term {
         Term::FixInteger(FixInteger { value }) => Some(value as i64),
-        Term::Integer(Integer { value }) => Some(value as i64),
         Term::BigInteger(BigInteger { value }) => {
             // Try to downcast BigInt into i64 safely
             value.to_i64()
