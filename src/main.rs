@@ -41,23 +41,8 @@ fn main() {
 
         // If you stored as integer term, you may need external decoding.
         // For quick debugging, check if it's directly an integer:
-        let term = Term::decode(Cursor::new(&bytes)).expect("decode failed");
-
-    match term {
-        Term::FixInteger(FixInteger { value }) => {
-            println!("Height = {}", value);
-        }
-        Term::Integer(Integer { value }) => {
-            println!("Height = {}", value);
-        }
-        other => {
-            println!("Unexpected term: {:?}", other);
-        }
-    }
-        //if value.len() == 8 {
-        //    let height = i64::from_be_bytes(value.try_into().unwrap());
-        //    println!("Current chain height (decoded): {}", height);
-        //}
+       
+         println!("Current chain height (decoded): {}", decode_height(&bytes));
     } else {
         println!("No temporal_height key found, maybe query rooted_tip instead");
     }
